@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.client"
+    namespace = "com.example.test8"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.client"
+        applicationId = "com.example.test8"
         minSdk = 31
         targetSdk = 34
         versionCode = 1
@@ -37,6 +37,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.skeletonlayout)
+    implementation(libs.play.services.location)
+    implementation(libs.okhttp)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

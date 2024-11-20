@@ -1,4 +1,4 @@
-package com.example.client;
+package com.example.test8;
 
 import org.junit.Test;
 
