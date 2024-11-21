@@ -23,15 +23,12 @@ import androidx.viewpager2.widget.ViewPager2;
 
 
 import com.faltenreich.skeletonlayout.Skeleton;
-import com.faltenreich.skeletonlayout.SkeletonLayoutUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 import com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator;
-import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -212,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                             String stationValue = jsonObject.optString("station", "Unknown"); // station 키 값 추출
 
                             // TextView에 값 설정
-                            TextView station = findViewById(R.id.stationTextView);
+                            TextView station = findViewById(R.id.stationInfoTextView);
                             station.setText(stationValue);
                             skeleton.showOriginal();
                             skeleton2.showOriginal();

@@ -9,28 +9,29 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/busTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:layout_marginTop="16dp"
         android:text="셔틀버스"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="20sp"
         android:theme="@style/Base.Theme.Test8"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toEndOf="@+id/hoseoTextView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/hoseoTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="호서대학교"
-        android:textColor="#8B2426"
+        android:textColor="?attr/colorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:theme="@style/Base.Theme.Test8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,25 +54,26 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="12dp"
+            android:theme="@style/Base.Theme.Test8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:maskCornerRadius="15dp"
             app:shimmerAngle="0"
-            app:shimmerColor="#C5C5C5">
+            app:shimmerColor="?attr/shimmerColor">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/stationTextView"
+                    android:id="@+id/stationInfoTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="샘플정류장"
                     android:textAlignment="center"
-                    android:textColor="?attr/colorPrimary"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:textSize="34sp"
                     android:theme="@style/Base.Theme.Test8"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -110,12 +112,13 @@
             android:id="@+id/skeletonLayout3"
             android:layout_width="250dp"
             android:layout_height="130dp"
+            android:theme="@style/Base.Theme.Test8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/skeletonLayout2"
             app:maskCornerRadius="15dp"
             app:shimmerAngle="0"
-            app:shimmerColor="#C5C5C5">
+            app:shimmerColor="?attr/shimmerColor">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -143,12 +146,13 @@
             android:layout_width="180dp"
             android:layout_height="50dp"
             android:layout_marginTop="25dp"
+            android:theme="@style/Base.Theme.Test8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:maskCornerRadius="15dp"
             app:shimmerAngle="0"
-            app:shimmerColor="#C5C5C5">
+            app:shimmerColor="?attr/shimmerColor">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -178,11 +182,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:dampingRatio="0.5"
-            app:dotsColor="#8B2426"
+            app:dotsColor="?attr/colorPrimary"
             app:dotsCornerRadius="8dp"
             app:dotsSize="12dp"
             app:dotsSpacing="6dp"
-            app:dotsStrokeColor="#8B2426"
+            app:dotsStrokeColor="?attr/colorPrimary"
             app:dotsStrokeWidth="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -191,13 +195,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/stationTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
         android:layout_marginBottom="12dp"
         android:text="정류장"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
         android:theme="@style/Base.Theme.Test8"
@@ -205,13 +209,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/timeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
         android:layout_marginBottom="12dp"
         android:text="시간"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
         android:theme="@style/Base.Theme.Test8"

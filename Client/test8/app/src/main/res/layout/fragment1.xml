@@ -13,7 +13,7 @@
         android:layout_height="50dp"
         android:text="아산캠퍼스행"
         android:textAlignment="center"
-        android:textColor="?attr/colorSecondary"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="28sp"
         android:theme="@style/Base.Theme.Test8"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,12 +23,12 @@
 
 
     <TextView
-        android:id="@+id/timeTextView"
+        android:id="@+id/timeInfoTextView"
         android:layout_width="250dp"
         android:layout_height="130dp"
         android:text="00:00"
         android:textAlignment="center"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="96sp"
         android:theme="@style/Base.Theme.Test8"
         app:layout_constraintBottom_toBottomOf="parent"

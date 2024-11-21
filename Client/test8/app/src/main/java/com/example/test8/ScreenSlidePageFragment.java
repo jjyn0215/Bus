@@ -25,7 +25,7 @@ public class ScreenSlidePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment1, container, false);
-        TextView timeTextView = view.findViewById(R.id.timeTextView);
+        TextView timeTextView = view.findViewById(R.id.timeInfoTextView);
         TextView desTextView = view.findViewById(R.id.desTextView);
         if (getArguments() != null) {
             timeTextView.setText(getArguments().getString("arg_time", "No Data"));

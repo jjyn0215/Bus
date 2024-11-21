@@ -1,3 +1,5 @@
+### 테스트코드 ###
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -37,8 +39,7 @@ def send_back_time():
  
     data = {
         "station": closest,
-        "천안캠퍼스행": str(datetime.strftime(min(time_dts, key=lambda x: abs(x - datetime.now())), '%H:%M')),
-        "아산캠퍼스행": str(datetime.strftime(min(time_dts_2, key=lambda x: abs(x - datetime.now())), '%H:%M'))
+
     }
     return json.dumps(data, ensure_ascii=False)
 
@@ -70,15 +71,19 @@ async def get_bus_time():
             if distance < min_distance:
                 min_distance = distance
                 closest = name
-        # print(closest)
-        print(datetime.now(tz=p))
+        print(closest)
+        print(datetime.now())
         test = db.collection("main").document("time").get().to_dict()
-
+        print(test)
         time_dts = [datetime.now().replace(hour=int(t.split(':')[0]), minute=int(t.split(':')[1]), second=0, microsecond=0) for t in test['아->천'][closest]]
         time_dts_2 = [datetime.now().replace(hour=int(t.split(':')[0]), minute=int(t.split(':')[1]), second=0, microsecond=0) for t in test['천->아'][closest]]
+        try:
+            print(datetime.strftime(min([t for t in time_dts if t >= datetime.now()], key=lambda x: abs(x -  datetime.now())), '%H:%M'))
+            print(datetime.strftime(min([t for t in time_dts_2 if t >= datetime.now()], key=lambda x: abs(x - datetime.now())), '%H:%M'))
+        except:
+            print(datetime.strftime(time_dts[0], '%H:%M'))
+            print(datetime.strftime(time_dts_2[0], '%H:%M'))
 
-        print(datetime.strftime(min([t for t in time_dts if t >= datetime.now()], key=lambda x: abs(x -  datetime.now())), '%H:%M'))
-        print(datetime.strftime(min([t for t in time_dts_2 if t >= datetime.now()], key=lambda x: abs(x - datetime.now())), '%H:%M'))
         driver = webdriver.Chrome(options=options)
         driver.get(url)
         time.sleep(3)
