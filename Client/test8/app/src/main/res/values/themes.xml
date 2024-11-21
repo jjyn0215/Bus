@@ -2,8 +2,9 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Test8" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+         <item name="colorPrimary">#181818</item>
+         <item name="colorSecondary">#6C7074</item>
+         <item name="android:colorBackground">#F0F1F4</item>
+         <item name="android:colorForeground">#FEFEFE</item>
     </style>
-
-    <style name="Theme.Test8" parent="Base.Theme.Test8" />
 </resources>

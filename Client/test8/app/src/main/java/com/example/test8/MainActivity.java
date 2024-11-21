@@ -27,6 +27,8 @@ import com.faltenreich.skeletonlayout.SkeletonLayoutUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 import com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private Skeleton skeleton;
     private Skeleton skeleton2;
     private Skeleton skeleton3;
+    private Snackbar snackbar;
     private SpringDotsIndicator dotsIndicator;
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_REQUEST_CODE = 1000;
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Either use an existing Skeletonlayout
+
         skeleton = findViewById(R.id.skeletonLayout);
         skeleton2 = findViewById(R.id.skeletonLayout2);
         skeleton3 = findViewById(R.id.skeletonLayout3);
@@ -152,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             } else {
-                                Toast.makeText(MainActivity.this, "Location not available", Toast.LENGTH_SHORT).show();
+                                showSnackBar("위치 사용 불가");
                             }
                         }
                     });
@@ -166,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getCurrentLocation();
             } else {
-                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
+                showSnackBar("설정에서 위치 권한을 허용해 주세요.");
             }
         }
     }
@@ -219,10 +223,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show());
+                    showSnackBar("오류 발생 : " + response.code());
                 }
             }
         });
+    }
+
+    private void showSnackBar(String text){
+        snackbar = Snackbar.make(findViewById(R.id.main), text, Snackbar.LENGTH_SHORT);
+        snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE);
+        runOnUiThread(snackbar::show);
     }
 }
 

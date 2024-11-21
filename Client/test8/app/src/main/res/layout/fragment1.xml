@@ -3,17 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:theme="@style/Base.Theme.Test8">
 
 
     <TextView
         android:id="@+id/desTextView"
-        android:layout_width="215dp"
-        android:layout_height="60dp"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
         android:text="아산캠퍼스행"
         android:textAlignment="center"
-        android:textColor="#181818"
-        android:textSize="34sp"
+        android:textColor="?attr/colorSecondary"
+        android:textSize="28sp"
+        android:theme="@style/Base.Theme.Test8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +28,9 @@
         android:layout_height="130dp"
         android:text="00:00"
         android:textAlignment="center"
-        android:textColor="#181818"
+        android:textColor="?attr/colorPrimary"
         android:textSize="96sp"
+        android:theme="@style/Base.Theme.Test8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"

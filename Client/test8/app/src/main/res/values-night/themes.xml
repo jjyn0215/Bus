@@ -3,5 +3,9 @@
     <style name="Base.Theme.Test8" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#FAFAF7</item>
+        <item name="colorSecondary">#898A8D</item>
+        <item name="android:colorBackground">#070B0F</item>
+        <item name="android:colorForeground">#17181D</item>
     </style>
 </resources>
