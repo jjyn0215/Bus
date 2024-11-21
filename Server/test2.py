@@ -50,12 +50,20 @@ def send_back_data():
     time_dts_2 = [now.replace(hour=int(t.split(':')[0]), minute=int(t.split(':')[1]), second=0, microsecond=0) for t in test['천->아'][closest]]    
     #print(datetime.strftime(min([t for t in time_dts if t >= datetime.now()], key=lambda x: abs(x -  datetime.now())), '%H:%M'))
     # print(datetime.strftime(min([t for t in time_dts_2 if t >= datetime.now()], key=lambda x: abs(x - datetime.now())), '%H:%M'))
-    data = {
-        "station": closest,
-        "distance": min_distance,
-        "천안캠퍼스행": str(datetime.strftime(min([t for t in time_dts if t >= now], key=lambda x: abs(x -  now)), '%H:%M')),
-        "아산캠퍼스행": str(datetime.strftime(min([t for t in time_dts_2 if t >= now], key=lambda x: abs(x - now)), '%H:%M'))
-    }
+    try:
+        data = {
+            "station": closest,
+            "distance": min_distance,
+            "천안캠퍼스행": str(datetime.strftime(min([t for t in time_dts if t >= now], key=lambda x: abs(x -  now)), '%H:%M')),
+            "아산캠퍼스행": str(datetime.strftime(min([t for t in time_dts_2 if t >= now], key=lambda x: abs(x - now)), '%H:%M'))
+        }
+    except:
+        data = {
+            "station": closest,
+            "distance": min_distance,
+            # "천안캠퍼스행": str(datetime.strftime(min([t for t in time_dts if t >= now], key=lambda x: abs(x -  now)), '%H:%M')), 
+            # "아산캠퍼스행": str(datetime.strftime(min([t for t in time_dts_2 if t >= now], key=lambda x: abs(x - now)), '%H:%M')) ### 나중에 서버꺼 복붙
+        }
     return json.dumps(data, ensure_ascii=False)    
 
 def haversine(lat1, lon1, lat2, lon2):
