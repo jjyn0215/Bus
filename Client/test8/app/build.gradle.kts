@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.test8"
-        minSdk = 31
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -32,7 +32,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -41,7 +40,10 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.okhttp)
     implementation(libs.dotsindicator)
-    implementation(libs.ultra.ptr)
+    implementation(libs.legacy.support.v4)
+    implementation(libs.maps.map.sdk)
+    implementation(libs.fancytoast)
+    implementation(libs.androidx.swiperefreshlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

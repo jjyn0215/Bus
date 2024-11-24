@@ -12,6 +12,15 @@ playServicesLocation = "21.3.0"
 okhttp = "5.0.0-alpha.14"
 dotsindicator = "5.0"
 ultraPtr = "1.0.11"
+legacySupportV4 = "1.0.0"
+mapSdk = "3.17.0"
+mapSdkVersion = "3.19.1"
+airysnackbar = "LatestVersion"
+fancytoast = "2.0.2"
+motiontoast = "1.4"
+motiontoastVersion = "1.5"
+swiperefreshlayout = "1.2.0-alpha01"
+swiperefreshlayoutVersion = "1.1.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -26,6 +35,15 @@ play-services-location = { group = "com.google.android.gms", name = "play-servic
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 dotsindicator = { group = "com.tbuonomo", name = "dotsindicator", version.ref = "dotsindicator" }
 ultra-ptr = { group = "in.srain.cube", name = "ultra-ptr", version.ref = "ultraPtr" }
+legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
+map-sdk = { group = "com.naver.maps", name = "map-sdk", version.ref = "mapSdk" }
+maps-map-sdk = { group = "com.naver.maps", name = "map-sdk", version.ref = "mapSdkVersion" }
+airysnackbar = { group = "com.github.akndmr", name = "AirySnackbar", version.ref = "airysnackbar" }
+fancytoast = { group = "io.github.shashank02051997", name = "FancyToast", version.ref = "fancytoast" }
+motiontoast = { group = "com.github.Spikeysanju", name = "MotionToast", version.ref = "motiontoast" }
+spikeysanju-motiontoast = { group = "com.github.Spikeysanju", name = "MotionToast", version.ref = "motiontoastVersion" }
+swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayoutVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

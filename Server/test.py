@@ -36,7 +36,27 @@ options.add_argument('--ignore-certificate-errors=yes')
 def send_back_time():
     # 가장 가까운 위치 찾기
     print(json.loads(request.get_data(), encoding='utf-8'))
- 
+    my_location = [36.735, 127.074]
+    min_distance = float('inf')
+    locations = db.collection("loc").document("아<->천").get().to_dict()
+    for name, coords in locations.items():
+        distance = haversine(my_location[0], my_location[1], coords[0], coords[1])
+        if distance < min_distance:
+            min_distance = distance
+            closest = name
+    print(closest)
+    print(datetime.now())
+    test = db.collection("main").document("time").get().to_dict()
+    print(test)
+    time_dts = [datetime.now().replace(hour=int(t.split(':')[0]), minute=int(t.split(':')[1]), second=0, microsecond=0) for t in test['아->천'][closest]]
+    time_dts_2 = [datetime.now().replace(hour=int(t.split(':')[0]), minute=int(t.split(':')[1]), second=0, microsecond=0) for t in test['천->아'][closest]]
+    try:
+        print(datetime.strftime(min([t for t in time_dts if t >= datetime.now()], key=lambda x: abs(x -  datetime.now())), '%H:%M'))
+        print(datetime.strftime(min([t for t in time_dts_2 if t >= datetime.now()], key=lambda x: abs(x - datetime.now())), '%H:%M'))
+    except:
+        
+        print(datetime.strftime(time_dts[0], '%H:%M'))
+        print(datetime.strftime(time_dts_2[0], '%H:%M'))
     data = {
         "station": closest,
 
@@ -63,61 +83,52 @@ stations = ['아산캠퍼스', '천안아산역', '쌍용2동', '충무병원', 
 
 async def get_bus_time(): 
     while True:
-        my_location = [36.735, 127.074]
-        min_distance = float('inf')
-        locations = db.collection("loc").document("아<->천").get().to_dict()
-        for name, coords in locations.items():
-            distance = haversine(my_location[0], my_location[1], coords[0], coords[1])
-            if distance < min_distance:
-                min_distance = distance
-                closest = name
-        print(closest)
-        print(datetime.now())
-        test = db.collection("main").document("time").get().to_dict()
-        print(test)
-        time_dts = [datetime.now().replace(hour=int(t.split(':')[0]), minute=int(t.split(':')[1]), second=0, microsecond=0) for t in test['아->천'][closest]]
-        time_dts_2 = [datetime.now().replace(hour=int(t.split(':')[0]), minute=int(t.split(':')[1]), second=0, microsecond=0) for t in test['천->아'][closest]]
-        try:
-            print(datetime.strftime(min([t for t in time_dts if t >= datetime.now()], key=lambda x: abs(x -  datetime.now())), '%H:%M'))
-            print(datetime.strftime(min([t for t in time_dts_2 if t >= datetime.now()], key=lambda x: abs(x - datetime.now())), '%H:%M'))
-        except:
-            print(datetime.strftime(time_dts[0], '%H:%M'))
-            print(datetime.strftime(time_dts_2[0], '%H:%M'))
-
         driver = webdriver.Chrome(options=options)
         driver.get(url)
         time.sleep(3)
 
         try:
-            ### 아산캠퍼스 <-> 천안캠퍼스 구간 (월~금) 정류장 : 7개(양방향 14개) ###
-            element = driver.find_element(By.XPATH, '//*[@id="body"]/div[2]/div[5]/table')
-            value = element.text.split('도착')[4].split('\n')
-            value.pop(0)
-            doc_ref = db.collection("main").document("time")
-            parsed = []
-            for x in range(len(value)):
-                temp = value[x].split(' ')
-                temp.pop(0)
-                if temp[0] == '***':
-                    continue
-                elif '직행' in temp:
-                    fixed = [_ for _ in range(14)]
-                    fixed[0] = temp[0]
-                    fixed[1] = temp[1]
-                    fixed[12] = temp[6]
-                    fixed[13] = temp[7]
-                    parsed.append(fixed)
-                else:
-                    parsed.append(temp)
-            result = [list(pair) for pair in zip(*parsed)]
-
-            for i in range(len(result)):
-                if (i < 7):
-                    doc_ref.set({"아->천": {stations[i]: [x for x in result[i] if not isinstance(x, int)]}}, merge=True)
-                else:
-                    doc_ref.set({"천->아": {list(reversed(stations))[i - len(stations)]: [x for x in result[i] if not isinstance(x, int)]}}, merge=True)
-                    
+            ### 아산캠퍼스 <-> 천안캠퍼스 구간 정류장 : 7개(양방향 14개) ###
+            for k in range(3):
+                if k == 0:
+                    element = driver.find_element(By.XPATH, '//*[@id="body"]/div[2]/div[5]/table/tbody')
+                    doc_ref = db.collection("main").document("아<->천(평일)")
+                elif k == 1:
+                    element = driver.find_element(By.XPATH, '//*[@id="body"]/div[2]/div[8]/table/tbody')
+                    doc_ref = db.collection("main").document("아<->천(토요일)")
+                elif k == 2:
+                    element = driver.find_element(By.XPATH, '//*[@id="body"]/div[2]/div[9]/table/tbody')
+                    doc_ref = db.collection("main").document("아<->천(일요일)")
             
+                value = element.text.split('\n')
+                parsed = []
+                if k == 0:
+                    for x in range(len(value)):
+                        temp = value[x].split(' ')
+                        temp.pop(0)
+                        if temp[0] == '***':
+                            continue
+                        elif '직행' in temp:
+                            fixed = [_ for _ in range(14)]
+                            fixed[0] = temp[0]
+                            fixed[1] = temp[1]
+                            fixed[12] = temp[6]
+                            fixed[13] = temp[7]
+                            parsed.append(fixed)
+                        else:
+                            parsed.append(temp)
+                else:
+                    for x in range(len(value)):
+                        temp = value[x].split(' ')
+                        temp.pop(0)
+                        parsed.append(temp)
+                result = [list(pair) for pair in zip(*parsed)]
+                for i in range(len(result)):
+                    if (i < 7):
+                        doc_ref.set({"아->천": {stations[i]: [x for x in result[i] if not isinstance(x, int)]}}, merge=True)
+                    else:
+                        doc_ref.set({"천->아": {list(reversed(stations))[i - len(stations)]: [x for x in result[i] if not isinstance(x, int)]}}, merge=True)
+                    
             print("A new time has been uploaded.")
             
             driver.quit()

@@ -31,6 +31,9 @@ options.add_argument('--disable-gpu')
 options.add_argument('--ignore-ssl-errors=yes')
 options.add_argument('--ignore-certificate-errors=yes')
 
+stations = ['아산캠퍼스', '천안아산역', '쌍용2동', '충무병원', '천안역', '천안터미널', '천안캠퍼스']
+# stations_2 = ['아산캠퍼스', '롯데캐슬', '배방역', '아산시외버스터미널', '온양온천역', '배방역']
+
 @server.route('/', methods=['POST'])
 def send_back_data():
     # 가장 가까운 위치 찾기
@@ -45,7 +48,13 @@ def send_back_data():
             closest = name
     # print(closest)
     now = datetime.now(timezone('Asia/Seoul'))
-    test = db.collection("main").document("time").get().to_dict()
+    if now.weekday() == 5:
+        test = db.collection("main").document("아<->천(토요일)").get().to_dict()
+    elif now.weekday() == 6:
+        test = db.collection("main").document("아<->천(일요일)").get().to_dict()
+    else:
+        test = db.collection("main").document("아<->천(평일)").get().to_dict()
+
     time_dts = [now.replace(hour=int(t.split(':')[0]), minute=int(t.split(':')[1]), second=0, microsecond=0) for t in test['아->천'][closest]]
     time_dts_2 = [now.replace(hour=int(t.split(':')[0]), minute=int(t.split(':')[1]), second=0, microsecond=0) for t in test['천->아'][closest]]    
     #print(datetime.strftime(min([t for t in time_dts if t >= datetime.now()], key=lambda x: abs(x -  datetime.now())), '%H:%M'))
@@ -53,7 +62,7 @@ def send_back_data():
     try:
         data = {
             "station": closest,
-            "distance": min_distance,
+            "distance": round(min_distance, 1),
             "천안캠퍼스행": str(datetime.strftime(min([t for t in time_dts if t >= now], key=lambda x: abs(x -  now)), '%H:%M')),
             "아산캠퍼스행": str(datetime.strftime(min([t for t in time_dts_2 if t >= now], key=lambda x: abs(x - now)), '%H:%M'))
         }
@@ -79,8 +88,6 @@ def haversine(lat1, lon1, lat2, lon2):
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
     radius = 6371  # 지구 반지름 (단위: km)
     return radius * c
-
-stations = ['아산캠퍼스', '천안아산역', '쌍용2동', '충무병원', '천안역', '천안터미널', '천안캠퍼스']
 
 async def get_bus_time(): 
     while True:

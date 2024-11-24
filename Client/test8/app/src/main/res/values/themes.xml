@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources  xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Test8" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -7,6 +7,7 @@
         <item name="android:textColorSecondary">#6C7074</item>
         <item name="android:colorBackground">#F0F1F4</item>
         <item name="android:colorForeground">#FEFEFE</item>
+        <item name="android:startColor">#FEFEFE</item>
         <item name="shimmerColor">#C5C5C5</item>
         <item name="maskColor">#E0E0E0</item>
     </style>

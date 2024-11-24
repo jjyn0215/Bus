@@ -7,6 +7,7 @@
         <item name="android:textColorSecondary">#898A8D</item>
         <item name="android:colorBackground">#070B0F</item>
         <item name="android:colorForeground">#17181D</item>
+        <item name="android:startColor">#070B0F</item>
         <item name="shimmerColor">#505050</item>
         <item name="maskColor">#3E3E3E</item>
     </style>
