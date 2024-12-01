@@ -1,4 +1,4 @@
-### 테스트코드 ###
+### 테스트 ###
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By

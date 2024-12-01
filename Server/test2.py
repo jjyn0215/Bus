@@ -36,8 +36,8 @@ options.add_argument('--ignore-certificate-errors=yes')
 stations = ['아산캠퍼스', '천안아산역', '쌍용2동', '충무병원', '천안역', '천안터미널', '천안캠퍼스']
 # stations_2 = ['아산캠퍼스', '롯데캐슬', '배방역', '아산시외버스터미널', '온양온천역', '배방역']
 
-CLIENT_ID = "7w75zejxsi"
-CLIENT_SECRET = "t7BDzZaPZYt74dgB6otQ0WReWZ8TJYRAxrb89Q11"
+CLIENT_ID = ""
+CLIENT_SECRET = ""
 
 # Directions 5 API URL
 URL = "https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving"
