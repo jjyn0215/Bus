@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,8 +23,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -33,9 +30,6 @@ import com.faltenreich.skeletonlayout.Skeleton;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator;
 
@@ -45,7 +39,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -55,8 +48,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+// SummaryFragment : 홈 화면 Fragment
 public class SummaryFragment extends Fragment {
-    private static final int LOCATION_REQUEST_CODE = 1000;
     private Skeleton skeleton, skeleton2, skeleton3, skeleton4;
     private SpringDotsIndicator dotsIndicator;
     private FusedLocationProviderClient fusedLocationClient;
@@ -86,6 +79,7 @@ public class SummaryFragment extends Fragment {
         return view;
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -99,12 +93,12 @@ public class SummaryFragment extends Fragment {
         } else {
             getCurrentLocation();
         }
-        TextView privacyPolicy = view.findViewById(R.id.privacy_policy);
-        privacyPolicy.setOnClickListener(v -> {
+        TextView schedule = view.findViewById(R.id.full_schedule);
+        schedule.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.hoseo.ac.kr/Home/Contents.mbz?action=MAPP_2302082206"));
             startActivity(intent);
         });
-        TextView reload = view.findViewById(R.id.customer_service);
+        TextView reload = view.findViewById(R.id.refresh);
         reload.setOnClickListener(v -> {
             if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -120,6 +114,7 @@ public class SummaryFragment extends Fragment {
         });
     }
 
+    // ViewPager2용 어댑터
     private static class ScreenSlidePagerAdapter extends FragmentStateAdapter {
         private final List<String> timeList;
         private final List<String> desList;
@@ -142,28 +137,25 @@ public class SummaryFragment extends Fragment {
         }
     }
 
+    // 권한이 부여된 상태에서 위치 가져오기
     private void getCurrentLocation() {
-        // 권한이 부여된 상태에서 위치 가져오기
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
-                    .addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                try {
-                                    postRequest(location.getLatitude(), location.getLongitude());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                showSnackBar("위치 사용 불가", FancyToast.ERROR);
+                    .addOnSuccessListener(requireActivity(), location -> {
+                        if (location != null) {
+                            try {
+                                postRequest(location.getLatitude(), location.getLongitude());
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
+                        } else {
+                            showSnackBar("위치 사용 불가", FancyToast.ERROR);
                         }
                     });
         }
     }
 
-
+    // 서버로 위치 전송하고 데이터 반환받아 표시
     private void postRequest(double latitude, double longitude) throws IOException {
         RequestBody body = RequestBody.create(String.format("{ \"latitude\": %s, \"longitude\":%s }", latitude, longitude), JSON);
         Request request = new Request.Builder()
@@ -174,7 +166,7 @@ public class SummaryFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
-                requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "오류 발생 : " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
 
 
@@ -198,21 +190,23 @@ public class SummaryFragment extends Fragment {
                             viewPager.setAdapter(adapter);
                             dotsIndicator.attachTo(viewPager);
                             viewPager.setVisibility(View.VISIBLE);
-                            String stationValue = jsonObject.optString("station", "Unknown");
-                            String distanceValue = jsonObject.optString("distance", "Unknown");// station 키 값 추출
+                            String stationValue = jsonObject.optString("station", "Unknown"); // station 키 값 추출
+                            String distanceValue = jsonObject.optString("distance", "Unknown") + "km";
                             String latitude = jsonObject.optString("latitude", "Unknown");
                             String longitude = jsonObject.optString("longitude", "Unknown");
+
                             SharedPreferences sharedPreferences = requireContext().getSharedPreferences("Coords", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("latitude", latitude);
                             editor.putString("longitude", longitude);
                             editor.putString("station", stationValue);
-                            editor.apply(); // 저장
+                            editor.putString("distance", distanceValue);
+                            editor.apply(); // MapFragment에 넘겨주기
 
                             // TextView에 값 설정
                             TextView station = requireView().findViewById(R.id.stationInfoTextView);
                             TextView distance = requireView().findViewById(R.id.distanceTextView);
-                            distance.setText(distanceValue + " km");
+                            distance.setText(distanceValue);
                             station.setText(stationValue);
                             skeleton.showOriginal();
                             skeleton2.showOriginal();
@@ -232,7 +226,7 @@ public class SummaryFragment extends Fragment {
         });
     }
 
-
+    // 권한 달라고 확인받기
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
@@ -242,9 +236,8 @@ public class SummaryFragment extends Fragment {
                 }
             });
 
+    // 스낵바 표시
     private void showSnackBar(String text, int type){
-        requireActivity().runOnUiThread(() -> {
-            FancyToast.makeText(requireContext(), text, FancyToast.LENGTH_SHORT, type,false).show();
-        });
+        requireActivity().runOnUiThread(() -> FancyToast.makeText(requireContext(), text, FancyToast.LENGTH_SHORT, type,false).show());
     }
 }

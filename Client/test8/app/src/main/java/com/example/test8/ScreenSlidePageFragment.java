@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+// ScreenSlidePageFragment : ViewPager2의 요소 Fragment
 public class ScreenSlidePageFragment extends Fragment {
 
     // Factory 메서드로 데이터 전달
@@ -24,7 +25,7 @@ public class ScreenSlidePageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment1, container, false);
+        View view = inflater.inflate(R.layout.fragment_time, container, false);
         TextView timeTextView = view.findViewById(R.id.timeInfoTextView);
         TextView desTextView = view.findViewById(R.id.desTextView);
         if (getArguments() != null) {

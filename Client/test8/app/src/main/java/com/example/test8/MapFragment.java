@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,13 +20,12 @@ import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
+import com.naver.maps.map.overlay.Align;
 import com.naver.maps.map.overlay.Marker;
-import com.naver.maps.map.overlay.PathOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
-import com.shashank.sony.fancytoastlib.FancyToast;
 
-import java.util.Arrays;
 
+// MapFragment : 네이버 지도 표시용 Fragment
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
@@ -53,8 +52,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
 
-        // FancyToast 호출
-
         // LocationSource 연결
         naverMap.setLocationSource(locationSource);
         naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_TRANSIT, true);
@@ -73,10 +70,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         double latitude = Double.parseDouble(sharedPreferences.getString("latitude", "Default Value"));
         double longitude = Double.parseDouble(sharedPreferences.getString("longitude", "."));
 
+        // 마커 설정
         Marker marker = new Marker();
         marker.setPosition(new LatLng(latitude, longitude));
         marker.setCaptionTextSize(16);
         marker.setCaptionText(sharedPreferences.getString("station", "."));
+        marker.setCaptionAligns(Align.Top);
+        marker.setSubCaptionText(sharedPreferences.getString("distance", "."));
         marker.setMap(naverMap);
 
         CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(latitude, longitude))

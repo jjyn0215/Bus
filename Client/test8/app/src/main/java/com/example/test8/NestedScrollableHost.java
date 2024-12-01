@@ -2,14 +2,11 @@ package com.example.test8;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +21,9 @@ import androidx.viewpager2.widget.ViewPager2;
  * This solution has limitations when using multiple levels of nested scrollable elements
  * (e.g. a horizontal RecyclerView in a vertical RecyclerView in a horizontal ViewPager2).
  */
+
+// NestedScrollableHost : ViewPager2 안에 ViewPager2가 있으면 자식 ViewPager2의 스크롤이 불가한 현상을 해결하기 위한 클래스
+    // 레이아웃에 적용하면 렌더링이 안되는 문제가 있습니다
 public class NestedScrollableHost extends FrameLayout {
 
     private ViewPager2 parentViewPager;

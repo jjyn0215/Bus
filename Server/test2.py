@@ -1,4 +1,4 @@
-### 실제 서버용 ###
+### 테스트 ###
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -14,6 +14,8 @@ from math import radians, sin, cos, sqrt, atan2
 from datetime import datetime
 import json
 from pytz import timezone
+import requests
+
 server = Flask(__name__)
 
 # Use a service account.
@@ -33,6 +35,12 @@ options.add_argument('--ignore-certificate-errors=yes')
 
 stations = ['아산캠퍼스', '천안아산역', '쌍용2동', '충무병원', '천안역', '천안터미널', '천안캠퍼스']
 # stations_2 = ['아산캠퍼스', '롯데캐슬', '배방역', '아산시외버스터미널', '온양온천역', '배방역']
+
+CLIENT_ID = "7w75zejxsi"
+CLIENT_SECRET = "t7BDzZaPZYt74dgB6otQ0WReWZ8TJYRAxrb89Q11"
+
+# Directions 5 API URL
+URL = "https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving"
 
 @server.route('/', methods=['POST'])
 def send_back_data():
@@ -59,6 +67,42 @@ def send_back_data():
     time_dts_2 = [now.replace(hour=int(t.split(':')[0]), minute=int(t.split(':')[1]), second=0, microsecond=0) for t in test['천->아'][closest]]    
     #print(datetime.strftime(min([t for t in time_dts if t >= datetime.now()], key=lambda x: abs(x -  datetime.now())), '%H:%M'))
     # print(datetime.strftime(min([t for t in time_dts_2 if t >= datetime.now()], key=lambda x: abs(x - datetime.now())), '%H:%M'))
+
+    keys = list(locations.keys())
+
+    
+    # 출발지와 도착지 설정 (위도, 경도)
+    start = f"{locations[keys[keys.index(closest) - 1]][1]},{locations[keys[keys.index(closest) - 1]][1]}"  # 출발지 (예: 네이버 본사)
+    goal = f"{locations[closest][1]},{locations[closest][0]}"   # 도착지 (예: 강남역)
+
+    # API 요청 매개변수
+    params = {
+        "start": start,
+        "goal": goal,
+        "option": "trafast"  # 경로 옵션 (trafast: 빠른길, tracomfort: 편안한길 등)
+    }
+
+    # API 요청 헤더
+    headers = {
+        "X-NCP-APIGW-API-KEY-ID": CLIENT_ID,
+        "X-NCP-APIGW-API-KEY": CLIENT_SECRET
+    }
+
+    # API 요청 보내기
+    response = requests.get(URL, headers=headers, params=params)
+
+    # 응답 처리
+    if response.status_code == 200:
+        data = response.json()
+        print("경로 탐색 결과:")
+        print(response)
+        for path in data.get("route", {}).get("trafast", []):  # trafast 경로 정보
+            summary = path.get("summary", {})
+            distance = summary.get("distance")  # 거리 (미터)
+            duration = summary.get("duration")  # 예상 소요 시간 (밀리초)
+            print(f"거리: {distance}m, 예상 소요 시간: {duration // 1000}초")
+    else:
+        print(f"API 요청 실패: {response.status_code}, {response.text}")
     try:
         data = {
             "station": closest,
@@ -68,7 +112,7 @@ def send_back_data():
         }
     except:
         data = {
-            "station": closest,
+            "station": closest, 
             "distance": min_distance,
             # "천안캠퍼스행": str(datetime.strftime(min([t for t in time_dts if t >= now], key=lambda x: abs(x -  now)), '%H:%M')), 
             # "아산캠퍼스행": str(datetime.strftime(min([t for t in time_dts_2 if t >= now], key=lambda x: abs(x - now)), '%H:%M')) ### 나중에 서버꺼 복붙

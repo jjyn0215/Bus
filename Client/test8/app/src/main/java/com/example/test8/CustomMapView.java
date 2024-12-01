@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 
 import com.naver.maps.map.MapView;
 
+// CustonMapView : ViewPager2와 터치가 중복되어서 해결하기 위한 별도 클래스
 public class CustomMapView extends MapView {
     public CustomMapView(Context context) {
         super(context);
